@@ -11,18 +11,47 @@ public class ActionGameCharControl : MonoBehaviour
     #region _Private_
     private Vector3 moveDelta;
     private CharacterController controller;
+    private Animator anims;
+
     private Vector3 camForward;
     private Vector3 camRight;
     private FixedJoystick joystick;
 
     private GameObject obj;
     #endregion
+
+
+    #region _public
+
+    public Animator Anims
+    {
+        get
+        {
+            if(anims == null)
+            {
+                anims = transform.GetComponentInChildren<Animator>();
+            }
+
+            return anims;
+        }
+    }
+    #endregion
+
+    // 자주 쓰는 애니메이션 문자열을 중복되지 않는 정수의 값으로 변환
+    // 전역 선언
+    #region _AnimHash_
+    private static int animsParam_isWalk = Animator.StringToHash("isWalk");
+
+    #endregion
+
     private void Awake()
     {
         if(!TryGetComponent<CharacterController>(out controller))
         {
             Debug.Log("AG_Controler.cs - Awake() - 컨트롤러 참조 실패");
         }
+
+        //gameObject.AddComponent<Animator>(); 런타임에 컴포넌트를 추가 혹은 제거
 
         obj = GameObject.Find("Joystick");
         if(obj != null )
@@ -53,6 +82,16 @@ public class ActionGameCharControl : MonoBehaviour
 
         moveDelta = camForward * moveDelta.z + camRight * moveDelta.x;
         moveDelta.Normalize();
+
+        
+        if(moveDelta != Vector3.zero)
+        {
+            transform.forward = moveDelta;
+            //자기자신의 앞방향을 moveDelta로 쓰겠다
+        }
+
+        //문자열로 찾으면 문자열이 길수록, 할당하는 메모리가 커짐
+        Anims?.SetBool(animsParam_isWalk, moveDelta != Vector3.zero);
 
         controller.Move(moveDelta * (moveSpeed* Time.deltaTime));
     }
