@@ -67,8 +67,8 @@ public class ActionGameCharControl : MonoBehaviour
         moveDelta.y = 0.0f;
         moveDelta.z = Input.GetAxis("Vertical");
 
-        //moveDelta.x += joystick.Horizontal;
-        //moveDelta.z += joystick.Vertical;
+        moveDelta.x += joystick.Horizontal;
+        moveDelta.z += joystick.Vertical;
         moveDelta.Normalize();
 
 
