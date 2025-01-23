@@ -106,20 +106,34 @@ public class InventoryData
         return 0; // 아이템 삭제를 성공
     } 
     // 아이템의 강화를 통해 아이템의 정보가 바뀌어짐
-    public void UpdateItemInfo(InventoryItemData item)
+    // data : NPC를 통해서 강화를 시도한 아이템을 정보를 넘겨받음
+    public void UpdateItemInfo(InventoryItemData data)
     {
-
+        for( int i = 0; i < items.Count; i++ )
+        {
+            if (items[i].uID == data.uID)
+            {
+                items[i].uID += 1;
+            }
+        }
     }
-
+        
     // 인벤토리 가득차있는지 확인
     public bool isFull()
     {
-        return false;
+        return curItemCount >= maxItemSlot;
     }
     // 현 인벤토리에 이미 있는 아이템을 습득 했으면 중첩
-    private int FindItemindex(InventoryItemData item)
+    private int FindItemindex(InventoryItemData newitem)
     {
-        return 0;
+        for(int i = items.Count - 1; i >= 0; i--)
+        {
+            if (items[i].itemID == newitem.itemID)
+            {
+                return i;
+            }
+        }
+        return -1; // 동일한 타입의 아이템이 존재하지 않는다.
     }
 
 }
