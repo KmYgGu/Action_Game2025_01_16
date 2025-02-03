@@ -21,6 +21,11 @@ public class UIManager : MonoBehaviour, IManager
     private GameObject obj;
     private Button btn;
 
+    private GameObject InventtoryObj;
+    private InventoryUI inventoryUI;
+    private bool isOpenInventory;
+
+
     private void Awake()
     {
         InitManager();//추후 게임 매니저 혹은 씬매니저에서 관리
@@ -93,6 +98,20 @@ public class UIManager : MonoBehaviour, IManager
                 btn.onClick.AddListener(() => HandleButtonClick(ButtonType.BT_SkiilBookBtn));
             }
         }
+
+        if(InventtoryObj == null)
+        {
+            InventtoryObj = GameObject.Find("Inventory");
+            if(InventtoryObj && !InventtoryObj.TryGetComponent<InventoryUI>(out inventoryUI))
+            {
+                Debug.Log("UI매니저에서 인벤토리 오브젝트는 존재하지만, 그 안에 inventoryUI 코드가 없습니다");
+            }
+
+            InventtoryObj.LeanScale(Vector3.zero, 0.1f);
+            isOpenInventory = false;
+
+        }
+
     }
 
     public void StartManager()
@@ -125,10 +144,27 @@ public class UIManager : MonoBehaviour, IManager
                 Debug.Log("메뉴");
                 break;
             case ButtonType.BT_InventoryBtn:
-                Debug.Log("가방");
+                ShowInventory();
+                //Debug.Log("가방");
                 break;
             default:
                 break;
+        }
+    }
+
+    public void ShowInventory()
+    {
+        isOpenInventory = !isOpenInventory;
+
+        if (isOpenInventory)
+        {
+            InventtoryObj.LeanScale(Vector3.one, 0.7f).setEase(LeanTweenType.easeInElastic);
+            //inventoryUI.리플레쉬 인벤토리
+            inventoryUI.RefreshInventoryUI();
+        }
+        else
+        {
+            InventtoryObj.LeanScale(Vector3.zero, 0.7f).setEase(LeanTweenType.easeInElastic);
         }
     }
 }

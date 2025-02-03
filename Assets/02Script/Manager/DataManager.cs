@@ -36,11 +36,11 @@ public class DataManager : Singleton<DataManager>, IManager
 
     }
 
-    private void Start()
-    {
-        InitManager();
-        StartManager();
-    }
+    //private void Start()//2025/02/03에 주석처리
+    //{
+    //    InitManager();
+    //    StartManager();
+    //}
     public void StartManager()
     {
         if(GetItemData(2002, out ItemData_Entity data))

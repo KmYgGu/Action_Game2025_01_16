@@ -44,7 +44,6 @@ public class GameManager : Singleton<GameManager> , IManager
 
     private void Start()
     {
-        
 
         //CreateUserData("하하하_이녀석");
         //SaveData();
@@ -136,6 +135,7 @@ public class GameManager : Singleton<GameManager> , IManager
 
     public void StartManager()
     {
+        //CreateUserData("하하하_이녀석"); //매번 컴퓨터를 포멧하고 키면 참고할 데이터가 없어서 null이 뜸
         dataPath = Application.persistentDataPath + "/Save";
         LoadData();
 
@@ -150,5 +150,28 @@ public class GameManager : Singleton<GameManager> , IManager
         SaveData();
     }
     #endregion
+
+    public InventoryData INVEN
+    {
+        get => pData.inventoryData;
+    }
+
+    public int PlayerGold
+    {
+        get => pData.gold;
+        set => pData.gold = value;
+    }
+    public string PlayerNickName
+    {
+        get => pData.nickName;
+    }
+
+    public int ItemUIDMaker
+    {
+        get
+        {
+            return ++pData.uidCounter; //21억 4700을 넘지 않는 이상 겹치지 않음
+        }
+    }
 
 }
