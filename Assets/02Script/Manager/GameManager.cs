@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.IO; //저장소(하드 디스크) 파일을 생성하고 쓰고, 읽기
+
 
 [System.Serializable]//직렬화된 데이터만 정상적으로 문자열로 바뀜
 public class PlayerData
@@ -23,6 +25,16 @@ public class PlayerData
 // 저장 / 불러오기
 // 인벤토리를 관리하면서 아이템 관리,
 // 플레이어 캐릭터의 정보,
+
+public enum SceneName
+{
+    IntroScene,
+    LoadScene,
+    BaseScene,
+    BattleScene,
+    BossScene,
+    TitleScene,
+}
 
 public class GameManager : Singleton<GameManager> , IManager
 {
@@ -133,21 +145,27 @@ public class GameManager : Singleton<GameManager> , IManager
         
     }
 
+    protected override void DoAwake()
+    {
+        base.DoAwake();
+        dataPath = Application.persistentDataPath + "/Save";
+    }
+
     public void StartManager()
     {
         //CreateUserData("하하하_이녀석"); //매번 컴퓨터를 포멧하고 키면 참고할 데이터가 없어서 null이 뜸
-        dataPath = Application.persistentDataPath + "/Save";
-        LoadData();
+        //dataPath = Application.persistentDataPath + "/Save";
+        //LoadData();
 
-        //Debug.Log($"닉네임{pData.nickName}  레벨은{pData.level}");
+        ////Debug.Log($"닉네임{pData.nickName}  레벨은{pData.level}");
 
-        InventoryItemData newItemInfo = new InventoryItemData();
-        newItemInfo.itemID = 2002;
-        newItemInfo.amount = 1;
+        //InventoryItemData newItemInfo = new InventoryItemData();
+        //newItemInfo.itemID = 2002;
+        //newItemInfo.amount = 1;
 
-        LootingItem(newItemInfo);
+        //LootingItem(newItemInfo);
 
-        SaveData();
+        //SaveData();
     }
     #endregion
 
@@ -174,4 +192,15 @@ public class GameManager : Singleton<GameManager> , IManager
         }
     }
 
+
+
+    #region SceneManager
+    private SceneName nextSceneName;
+    public SceneName NextSceneName => nextSceneName;
+    public void AsyncLoadNextScene(SceneName nextScene)
+    {
+        nextSceneName = nextScene;
+        SceneManager.LoadScene(SceneName.LoadScene.ToString());
+    }
+    #endregion
 }

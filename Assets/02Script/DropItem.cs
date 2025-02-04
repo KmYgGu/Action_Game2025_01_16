@@ -35,7 +35,7 @@ public class DropItem : MonoBehaviour
         rotTrans = transform.GetChild(0);
         valueA = 0;
 
-        isDrop = true;
+        isDrop = false;
 
     }
 
@@ -50,6 +50,31 @@ public class DropItem : MonoBehaviour
             rotTrans.position = pos;
         }
     }
-
+    // NPC
     // 충돌체크
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ground"))
+        {
+            rig.useGravity = false;
+            rig.velocity = Vector3.zero;
+            DropPosY = transform.position.y;
+            isDrop = true;
+        }
+
+        if(isDrop && other.CompareTag("Player"))
+        {
+            InventoryItemData newData = new InventoryItemData();
+            // 나중에 몬스터에 따라 드랍되는 템아이디 변경
+            newData.itemID = 2002;
+            newData.amount = 1;
+
+            if (GameManager.Inst.LootingItem(newData))
+            {
+                Destroy(gameObject);
+            }
+        }
+        
+    }
 }

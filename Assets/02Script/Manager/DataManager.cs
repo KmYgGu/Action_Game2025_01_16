@@ -12,6 +12,11 @@ public class DataManager : Singleton<DataManager>, IManager
     private Dictionary<int, ItemData_Entity> dicItemData = new Dictionary<int, ItemData_Entity>();
     private Dictionary<int, Monster_Entity> dicMonsterData = new Dictionary<int, Monster_Entity>();
 
+    private List<TipData_Entity> battleTip = new List<TipData_Entity>();
+    private List<TipData_Entity> baseSceneTip = new List<TipData_Entity>();
+    private List<TipData_Entity> bossSceneTip = new List<TipData_Entity>();
+    private int randValue;
+
     public void InitManager()
     {
         // 리소스 폴더에 있는 테이블을 불러들이고,
@@ -32,8 +37,51 @@ public class DataManager : Singleton<DataManager>, IManager
             {
                 dicMonsterData.Add(originTable.MonsterData[i].id, originTable.MonsterData[i]);
             }
+
+            for(int i = 0; i < originTable.TipMess.Count; i++)
+            {
+                if(originTable.TipMess[i].sceneName == SceneName.BaseScene.ToString())
+                {
+                    baseSceneTip.Add(originTable.TipMess[i]);
+                }
+                if (originTable.TipMess[i].sceneName == SceneName.BattleScene.ToString())
+                {
+                    battleTip.Add(originTable.TipMess[i]);
+                }
+                if (originTable.TipMess[i].sceneName == SceneName.BossScene.ToString())
+                {
+                    bossSceneTip.Add(originTable.TipMess[i]);
+                }
+
+            }
         }
 
+    }
+
+    public string GetTipMessage(SceneName sceneName)
+    {
+        string result = "";
+        switch(sceneName)
+        {
+            case SceneName.BaseScene:
+                randValue = Random.Range(0, baseSceneTip.Count);
+                result = baseSceneTip[randValue].tipText;
+                break;
+            case SceneName.BattleScene:
+                randValue = Random.Range(0, battleTip.Count);
+                result = battleTip[randValue].tipText;
+                break;
+            case SceneName.BossScene:
+                randValue = Random.Range(0, bossSceneTip.Count);
+                result = bossSceneTip[randValue].tipText;
+                break;
+
+                default:
+                result = "과도한 게임은 일상생활에 지장을 초래할 수 있습니다.";
+                    break;
+        }
+
+        return result;
     }
 
     //private void Start()//2025/02/03에 주석처리
