@@ -11,9 +11,11 @@ public class TitleManager : MonoBehaviour
 
     private bool havePlayerInfo;
 
-    private void Awake()
+    private void Start()//Awake()
     {
         InitTitleScene();
+
+        DataManager.Inst.InitManager();//게임 전체 사용하는 데이터 매니저 초기화.
     }
     //유저 데이터 있는지 확인
     // y : 터치했을 때 다음 씬으로 진입.

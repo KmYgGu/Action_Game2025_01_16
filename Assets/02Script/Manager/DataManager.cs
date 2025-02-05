@@ -64,6 +64,7 @@ public class DataManager : Singleton<DataManager>, IManager
         switch(sceneName)
         {
             case SceneName.BaseScene:
+
                 randValue = Random.Range(0, baseSceneTip.Count);
                 result = baseSceneTip[randValue].tipText;
                 break;

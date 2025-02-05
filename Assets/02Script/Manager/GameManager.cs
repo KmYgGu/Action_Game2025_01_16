@@ -196,7 +196,7 @@ public class GameManager : Singleton<GameManager> , IManager
 
     #region SceneManager
     private SceneName nextSceneName;
-    public SceneName NextSceneName => nextSceneName;
+    public SceneName NextScene => nextSceneName;
     public void AsyncLoadNextScene(SceneName nextScene)
     {
         nextSceneName = nextScene;
