@@ -76,13 +76,133 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
         sellView.SetActive(false);
         
     }
+    private int itemID, tradeCount, tradeGold, totalGold;
+
+    // 거래 성사가 되었을 때.
+    // 플레이어 데이터에서 골드를 소모하거나. 아이템을 지급. 골드지급과 아이템 소모
     public void OnClick_Apply()
     {
+        if(sellView.activeSelf)// 판매 탭이 열려있을 때
+        {
+            // 리버스 for문
+            for(int i = inventory.CurItemCount -1; 1 >=0; i--) // 아이템 목록에서 삭제
+            {
+                // todo 판매할 아이템의 갯수를 itemslot으로부터 받아온다
+                // 골드를 증가처리
+                GameManager.Inst.PlayerGold += tradeGold;
 
+                // 데이터를 관리하는 inventroy에서 실제 아이템을 삭제
+
+                InventoryItemData itemData = new InventoryItemData();
+                itemData.itemID = itemID;
+                itemData.amount = tradeCount;
+
+                inventory.DeleteItem(itemData);     
+            }
+#pragma warning disable CS0162 // 접근할 수 없는 코드가 있습니다.
+            OnClick_Selltap(); // << sell Tap 갱신작업
+#pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
+        }
+        else
+        {
+            totalGold = 0;
+
+            for(int i =0; i < 4; i++)
+            {
+                // 몇개의 아이템이 거래될지 정보 받아오고,
+                // buySlotSlist[i]
+
+                totalGold += tradeGold;
+            }
+
+            if(totalGold <= GameManager.Inst.PlayerGold)// 구매할 수 있는 상태
+            {
+                GameManager.Inst.PlayerGold -= totalGold;
+
+                for(int i = 0; i < 4; i++)
+                {
+                    // 슬롯의 정보 받아오기
+
+                    if(tradeCount > 0)
+                    {
+                        InventoryItemData itemData = new InventoryItemData();
+                        itemData.itemID = itemID;
+                        itemData.amount = tradeCount;
+                        inventory.AddItem(itemData); // 아이템 지급
+                    }
+                }
+            }
+            OnClick_Buytap(); // 구매 탭 갱신
+        }
     }
 
+    // 거래 총액과 플레이어 보유 골드가 변화 했을 때 UI 갱신
+    public void RefreshGold()
+    {
+        tradeText.text = totalGold.ToString();
+        balanceText.text = GameManager.Inst.PlayerGold.ToString();
+    }
 
+    public void CalculateGold()
+    {
+        totalGold = 0;
 
+        if (sellView.activeSelf)
+        {
+            for(int i = 0; i < sellSlotList.Count; i++)
+            {
+                if (sellSlotList[i].isActiveAndEnabled)
+                {
+                    //totalGold += sellSlotList[i].totalGold;
+                }
+            }
+        }
+        else
+        {
+            for(int i = 0; i < 4; i++)
+            {
+                if (buySlotList[i].isActiveAndEnabled)
+                {
+                    //totalGold += sellSlotList[i].totalGold;
+                }
+            }
+        }
+        RefreshGold();
+    }
+
+    // 판매 목록을 UI로 갱신
+    private void RefreshSellViewData()
+    {
+        userInven = GameManager.Inst.INVEN.GetItemList();// 얕은 복사
+
+        for(int i = 0;i < inventory.MaxCount; i++)
+        {
+            // 정상적으로 소유하고 있는 아이템인지 검사
+            if (i < inventory.CurItemCount && -1 < userInven[i].itemID)
+            {
+                //sellSlotList[i]
+            }
+            else
+            {
+                // 슬롯 구현 후
+            }
+        }
+        totalGold = 0;
+        RefreshGold();
+    }
+
+    private void RefreshBuyViewData()
+    {
+        InventoryItemData itemData = new InventoryItemData();
+        for(int i =0; i < 4; i++)
+        {
+            itemData.itemID = 2001001 + i;
+            itemData.amount = 999;
+            // buyslot 갱신
+        }
+        totalGold = 0;
+        RefreshGold();
+    }
 
     public void PopupClose()
     {
