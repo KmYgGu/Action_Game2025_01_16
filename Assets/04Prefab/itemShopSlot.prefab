@@ -619,6 +619,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f777052144655e64dbd4a6cf93f64fa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  icon: {fileID: 7854159423222643531}
+  itemNameText: {fileID: 1895915061624713049}
+  itemPriceText: {fileID: 2081142089960832017}
+  tradeCountText: {fileID: 7756157662886592823}
+  leftBTN: {fileID: 6110563917030788559}
+  rightBTN: {fileID: 3399163033649678003}
 --- !u!1 &7885019157241320584
 GameObject:
   m_ObjectHideFlags: 0

@@ -43,6 +43,9 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
                 itemShopSlot.gameObject.name = $"SellSlot_{i}";
                 // todo : 슬롯의 데이터 변경을 받아오는 델리게이트 체인 구독, 슬록스크립트 작성 후에
 
+                itemShopSlot.CreateSlot(this, i);
+                itemShopSlot.OnTotalChange += CalculateGold;
+
                 sellSlotList.Add(itemShopSlot);
             }
         }
@@ -53,6 +56,9 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
             {
                 itemShopSlot.gameObject.name = $"BuySlotM{i}";
                 // todo : 슬롯의 데이터 변경을 받아오는 델리게이트 체인 구독, 슬록스크립트 작성 후에
+
+                itemShopSlot.CreateSlot(this, i);
+                itemShopSlot.OnTotalChange += CalculateGold;
 
                 buySlotList.Add(itemShopSlot);
             }
@@ -65,12 +71,14 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
 
     public void OnClick_Selltap()
     {
+        RefreshSellViewData();
         //sellView 갱신
         sellView.SetActive(true);
         buyView.SetActive(false);
     }
     public void OnClick_Buytap()
     {
+        RefreshBuyViewData();
         //buyView 갱신
         buyView.SetActive(true);
         sellView.SetActive(false);
@@ -85,9 +93,10 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
         if(sellView.activeSelf)// 판매 탭이 열려있을 때
         {
             // 리버스 for문
-            for(int i = inventory.CurItemCount -1; 1 >=0; i--) // 아이템 목록에서 삭제
+            for(int i = inventory.CurItemCount -1; 1 >= 0; i--) // 아이템 목록에서 삭제
             {
                 // todo 판매할 아이템의 갯수를 itemslot으로부터 받아온다
+                sellSlotList[i].GetSellInfo(out itemID, out tradeCount, out tradeGold);
                 // 골드를 증가처리
                 GameManager.Inst.PlayerGold += tradeGold;
 
@@ -99,19 +108,18 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
 
                 inventory.DeleteItem(itemData);     
             }
-#pragma warning disable CS0162 // 접근할 수 없는 코드가 있습니다.
+
             OnClick_Selltap(); // << sell Tap 갱신작업
-#pragma warning restore CS0162 // 접근할 수 없는 코드가 있습니다.
+
         }
-        else
+        else// 구매탭
         {
             totalGold = 0;
 
             for(int i =0; i < 4; i++)
             {
                 // 몇개의 아이템이 거래될지 정보 받아오고,
-                // buySlotSlist[i]
-
+                buySlotList[i].GetBuyInfo(out itemID, out tradeCount,out tradeGold);
                 totalGold += tradeGold;
             }
 
@@ -122,7 +130,7 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
                 for(int i = 0; i < 4; i++)
                 {
                     // 슬롯의 정보 받아오기
-
+                    buySlotList[i].GetBuyInfo(out itemID, out tradeCount, out tradeGold);
                     if(tradeCount > 0)
                     {
                         InventoryItemData itemData = new InventoryItemData();
@@ -146,28 +154,30 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
     public void CalculateGold()
     {
         totalGold = 0;
+        //totalGold = 999;
 
         if (sellView.activeSelf)
         {
-            for(int i = 0; i < sellSlotList.Count; i++)
+            for (int i = 0; i < sellSlotList.Count; i++)
             {
                 if (sellSlotList[i].isActiveAndEnabled)
                 {
-                    //totalGold += sellSlotList[i].totalGold;
+                    totalGold += sellSlotList[i].TotalGold;
                 }
             }
         }
         else
         {
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 if (buySlotList[i].isActiveAndEnabled)
                 {
-                    //totalGold += sellSlotList[i].totalGold;
+                    totalGold += sellSlotList[i].TotalGold;
                 }
             }
+            RefreshGold();
         }
-        RefreshGold();
+        
     }
 
     // 판매 목록을 UI로 갱신
@@ -180,11 +190,11 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
             // 정상적으로 소유하고 있는 아이템인지 검사
             if (i < inventory.CurItemCount && -1 < userInven[i].itemID)
             {
-                //sellSlotList[i]
+                sellSlotList[i].RefreshSlot(userInven[i]);
             }
             else
             {
-                // 슬롯 구현 후
+                    sellSlotList[i].ClearSlot();
             }
         }
         totalGold = 0;
@@ -198,7 +208,8 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
         {
             itemData.itemID = 2001001 + i;
             itemData.amount = 999;
-            // buyslot 갱신
+                // buyslot 갱신
+                buySlotList[i].RefreshSlot(itemData);
         }
         totalGold = 0;
         RefreshGold();
@@ -215,3 +226,5 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
         gameObject.LeanScale(Vector3.one, 0.7f).setEase(LeanTweenType.easeInOutElastic);
     }
 }
+
+
