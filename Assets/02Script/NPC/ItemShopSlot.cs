@@ -117,7 +117,7 @@ public class ItemShopSlot : MonoBehaviour
 
         // ui표기 갱신
         tradeCountText.text = tradeCurCount.ToString();
-        totalGold = tradeGold * tradeCurCount;
+        TotalGold = tradeGold * tradeCurCount;
     }
 
     private void OnClickRightBTN()
@@ -127,6 +127,7 @@ public class ItemShopSlot : MonoBehaviour
 
         // ui표기 갱신
         tradeCountText.text = tradeCurCount.ToString();
-        totalGold = tradeGold * tradeCurCount;
+        //totalGold = tradeGold * tradeCurCount;
+        TotalGold = tradeGold * tradeCurCount;
     }
 }

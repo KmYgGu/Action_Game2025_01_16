@@ -35,7 +35,7 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
 
     private void InitPopup()
     {
-        inventory = GameManager.Inst.INVEN;
+        inventory = GameManager.Inst.INVEN;// 얕은 ㅂ목사 (같은 메모리 공간을 가르키는 참조를 발생)
         for(int i = 0; i< inventory.MaxCount; i++)
         {
             if(Instantiate(slotPrefab, sellViewContent).TryGetComponent<ItemShopSlot>(out itemShopSlot))
@@ -172,7 +172,7 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
             {
                 if (buySlotList[i].isActiveAndEnabled)
                 {
-                    totalGold += sellSlotList[i].TotalGold;
+                    totalGold += buySlotList[i].TotalGold;
                 }
             }
             RefreshGold();
@@ -194,7 +194,7 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
             }
             else
             {
-                    sellSlotList[i].ClearSlot();
+                sellSlotList[i].ClearSlot();
             }
         }
         totalGold = 0;
@@ -208,8 +208,8 @@ public class ItemShopPopup : MonoBehaviour, IPopUp
         {
             itemData.itemID = 2001001 + i;
             itemData.amount = 999;
-                // buyslot 갱신
-                buySlotList[i].RefreshSlot(itemData);
+            // buyslot 갱신
+            buySlotList[i].RefreshSlot(itemData);
         }
         totalGold = 0;
         RefreshGold();
