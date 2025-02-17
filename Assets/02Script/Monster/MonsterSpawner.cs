@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Redcode.Pools;
+using UnityEngine.AI;
 
 public enum SpawnType
 {
@@ -84,10 +85,18 @@ public class MonsterSpawner : MonoBehaviour
             spawnPos.x += Random.Range(-10f, 10.0f);
             spawnPos.y += Random.Range(-10f, 10.0f);
 
-
-            monster.transform.position = spawnPos;
-            monster.InitMonster(spawnMonsterTableID, this);
-            curCount++;
+            if(NavMesh.SamplePosition(spawnPos, out NavMeshHit hitResult, 10f, NavMesh.AllAreas ))
+            {
+                spawnPos = hitResult.position;
+                monster.transform.position = spawnPos;
+                monster.InitMonster(spawnMonsterTableID, this);
+                curCount++;
+            }
+            else
+            {
+                Debug.Log("몬스터 생성불가 위치");
+            }
+            
         }
     }
 

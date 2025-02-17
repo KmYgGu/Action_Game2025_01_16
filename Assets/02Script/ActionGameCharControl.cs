@@ -18,6 +18,12 @@ public class ActionGameCharControl : MonoBehaviour
     private FixedJoystick joystick;
 
     private GameObject obj;
+    private int manaPoint = 100;
+    public int ManaPoint
+    {
+        get => manaPoint;
+        set => manaPoint = value;
+    }
     #endregion
 
 

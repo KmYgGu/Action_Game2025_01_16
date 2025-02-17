@@ -24,6 +24,7 @@ public class DataManager : Singleton<DataManager>, IManager
         // 데이터가 필요하다고 요청하면 보내주는 역할
         if(!loadData)
         {
+            loadData = true;
             originTable = Resources.Load<ActionGame>("ActionGame");
             //리소스 폴더의 기준으로 해당하는 파일 이름을 넣어주면 동적 로딩을 해줌
 

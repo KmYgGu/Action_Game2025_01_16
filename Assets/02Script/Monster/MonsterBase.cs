@@ -1,3 +1,4 @@
+using Redcode.Pools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,24 @@ public class MonsterBase : MonoBehaviour, IDamaged
     // 자신을 관리해주는 풀의 이름
     [SerializeField] private string poolName;
     public string PoolName => poolName;//읽기 전용
+
+
+    // 몬스터가 발생시키는 프로젝타일을 관리하는 풀 매니저
+    private ProjectTileBase projectile;
+    [SerializeField] Transform attackTrans; // << 프로젝타일 생성 위치
+    private PoolManager projectileManager;
+    public PoolManager poolMGR
+    {
+        get
+        {
+            if(projectileManager == null)
+            {
+                TryGetComponent<PoolManager>(out projectileManager);
+               
+            }
+            return projectileManager;
+        }
+    }
 
 
 
@@ -96,6 +115,20 @@ public class MonsterBase : MonoBehaviour, IDamaged
     {
         // AI에 의해 호출되는 공격 처리.
         anims.SetTrigger(animHash_Attack);
+    }
+
+    public void SpawnProjectile()
+    {
+        Debug.Log("호출");
+        // 여기에서 스폰
+        projectile = poolMGR.GetFromPool<ProjectTileBase>(0);
+        projectile.transform.position = attackTrans.position;
+        projectile.transform.LookAt(attackTrans.position + transform.forward);
+        // 스폰된 위치 + 몬스터의 정면
+
+        projectile.InitProjectile(transform.forward, 10.0f, 10.0f, curData.attackDamage,
+            transform.tag, poolMGR);
+
     }
 
     public void TakeDamage(float damage, GameObject attacker)

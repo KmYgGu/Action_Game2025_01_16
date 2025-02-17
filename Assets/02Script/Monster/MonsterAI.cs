@@ -127,7 +127,19 @@ public class MonsterAI : MonoBehaviour
     {
         // 새로운 포지션이 네비 메쉬가 있는 영역인지 검증 후에
         // 이동을 시키도록
-        agent.SetDestination(newPos);
+        // 해당 좌표가 메쉬가 있는 위치인가?
+        
+        if(NavMesh.SamplePosition(newPos, out NavMeshHit hitResult, 10f, NavMesh.AllAreas))
+        {
+            newPos = hitResult.position;
+            agent.SetDestination(newPos);
+        }
+        else
+        {
+            agent.SetDestination(newPos);
+        }
+
+        //agent.SetDestination(newPos);
     }
 
 
