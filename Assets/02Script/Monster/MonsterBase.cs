@@ -89,7 +89,7 @@ public class MonsterBase : MonoBehaviour, IDamaged
         currentHP = curData.maxHp;
         agent.speed = curData.moveSpeed;
         // 몬스터가 타겟 위치의 어느 정도 거리에 접근하면 도착했다고 인식
-        agent.stoppingDistance = 2f;
+        agent.stoppingDistance = 6f;
 
         // 몬스터가 죽었을때랑 살았을 때를 구별하기 위한 레이어 설정
         gameObject.layer = LayerMask.NameToLayer("Enemy");

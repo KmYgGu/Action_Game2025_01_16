@@ -67,6 +67,7 @@ public class MonsterSpawner : MonoBehaviour
             if(curCount < maxCount)
             {
                 // 몬스터를 스폰
+                SpwanUnit();
             }
         }
     }
@@ -93,10 +94,7 @@ public class MonsterSpawner : MonoBehaviour
                 curCount++;
             }
             else
-            {
-                Debug.Log("몬스터 생성불가 위치");
-            }
-            
+                Debug.Log("몬스터 생성불가 위치");          
         }
     }
 

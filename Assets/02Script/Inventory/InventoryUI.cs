@@ -41,6 +41,10 @@ public class InventoryUI : MonoBehaviour
             else
                 Debug.Log("인벤토리UI코드에서 InitSlot함수의 슬롯 생성실패");
         }
+
+        // 인벤토리의 스크롤을 엉뚱한 곳으로 나가는 것을 방지
+        contectTrans.offsetMin = Vector2.zero;
+        contectTrans.offsetMax = Vector2.zero;
     }
 
     // 현 아이템 정보를 참조해서, 슬롯을 각각 갱신

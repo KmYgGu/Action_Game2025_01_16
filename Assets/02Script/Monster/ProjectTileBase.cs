@@ -60,6 +60,9 @@ public class ProjectTileBase : MonoBehaviour, IPoolObject
     // 오너를 제외한 다른 오브젝트와 충돌했을 때, 터지도록
     private void OnTriggerEnter(Collider other)
     {
+        if(other.gameObject == gameObject)
+            return;
+
         if(!other.CompareTag(ownerTag))
         {
             Explosion();
@@ -69,6 +72,7 @@ public class ProjectTileBase : MonoBehaviour, IPoolObject
     private void Explosion()// 주변에 데미지를 주기 전에
     {
         ApplyDamage(); // 주변에 데미지를 주고
+        particle.gameObject.SetActive(true);
         particle.Play();
         isInit = false;
         hamerObj.SetActive(false);

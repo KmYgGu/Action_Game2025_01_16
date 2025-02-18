@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+// 추상 클래스이기 때문에 게임 오브젝트에 넣을 수 없다
 public abstract class SkillBase : MonoBehaviour, IActiveSkill
 {
     // 외부에서 public으로 값을 가져올 수 있되, 값을 설정할 땐 상속된 파생 클래스에서만 가능함

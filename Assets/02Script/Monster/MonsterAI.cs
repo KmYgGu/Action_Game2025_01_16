@@ -45,6 +45,7 @@ public class MonsterAI : MonoBehaviour
         spawnedPos = transform.position;
 
         // 코루틴 실행
+        ChangeAIState(currentState);
     }
 
     public void ChangeAIState(AI_State newstate)
@@ -97,7 +98,7 @@ public class MonsterAI : MonoBehaviour
     {
         while(mainTarget != null)
         {
-            if(GetDistanceTarget() < 2.5f) // 테이블 정보 참조 사정거리
+            if(GetDistanceTarget() < 6.5f) // 테이블 정보 참조 사정거리
             {
                 ChangeAIState(AI_State.Attack);
             }
@@ -115,7 +116,20 @@ public class MonsterAI : MonoBehaviour
 
     IEnumerator Attack()
     {
-        yield return YieldInstructionCache.WaitForSeconds(1f);
+        while (true)
+        {
+            yield return YieldInstructionCache.WaitForSeconds(1f);
+
+            if (GetDistanceTarget() < 6.5f)
+            {
+                transform.LookAt(mainTarget.transform);
+                SendMessage("AttackTarget");
+            }
+            else
+                ChangeAIState(AI_State.Chase);
+        }
+
+        
     }
 
     IEnumerator Die()
@@ -136,7 +150,7 @@ public class MonsterAI : MonoBehaviour
         }
         else
         {
-            agent.SetDestination(newPos);
+            Debug.Log("도달할 수 없는 영역");
         }
 
         //agent.SetDestination(newPos);

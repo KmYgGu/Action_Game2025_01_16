@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public enum ButtonType
 {
-    BT_AttackBtn,
+    BT_AttackBtn,   // 칼 모양
     BT_Skiil01Btn,
     BT_Skiil02Btn,
     BT_Skiil03Btn,
@@ -24,6 +25,13 @@ public class UIManager : MonoBehaviour, IManager
     private GameObject InventtoryObj;
     private InventoryUI inventoryUI;
     private bool isOpenInventory;
+
+
+    public static event Action OnAttackButtonPressed;
+    public static event Action OnSkill01ButtonPressed;
+    public static event Action OnSkill02ButtonPressed;
+    public static event Action OnSkill03ButtonPressed;
+
 
 
     private void Awake()
@@ -126,19 +134,23 @@ public class UIManager : MonoBehaviour, IManager
         switch (type)
         {
             case ButtonType.BT_AttackBtn:
-                Debug.Log("공격");
+                OnAttackButtonPressed?.Invoke();
+                
                 break;
             case ButtonType.BT_SkiilBookBtn:
                 Debug.Log("스킬트리");
                 break;
             case ButtonType.BT_Skiil01Btn:
-                Debug.Log("스킬1");
+                OnSkill01ButtonPressed?.Invoke();
+                //Debug.Log("스킬1");
                 break;
             case ButtonType.BT_Skiil02Btn:
-                Debug.Log("스킬2");
+                OnSkill02ButtonPressed?.Invoke();
+                //Debug.Log("스킬2");
                 break;
             case ButtonType.BT_Skiil03Btn:
-                Debug.Log("스킬3");
+                OnSkill03ButtonPressed?.Invoke();
+                //Debug.Log("스킬3");
                 break;
             case ButtonType.BT_MenuBtn:
                 Debug.Log("메뉴");

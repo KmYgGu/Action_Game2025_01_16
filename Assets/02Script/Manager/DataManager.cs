@@ -17,6 +17,14 @@ public class DataManager : Singleton<DataManager>, IManager
     private List<TipData_Entity> bossSceneTip = new List<TipData_Entity>();
     private int randValue;
 
+    // 배틀 씬에서 바로 작업 테스트 하기 위해
+    protected override void DoAwake()
+    {
+        base.DoAwake();
+        InitManager();
+    }
+
+
     public void InitManager()
     {
         // 리소스 폴더에 있는 테이블을 불러들이고,
